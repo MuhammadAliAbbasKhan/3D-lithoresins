@@ -1,159 +1,195 @@
+// src/components/common/Footer.jsx
 import React from 'react';
-import { MapPin, Phone, Mail, ExternalLink, Award, ShieldCheck, Box } from 'lucide-react';
+import { Linkedin, Twitter, Youtube, Mail, MapPin, Phone, ExternalLink, ShieldCheck, Award, Box } from 'lucide-react';
 
-export const Footer = ({ setCurrentPage }) => {
+export function FooterComponent({ setCurrentPage = () => {} }) {
+  const navigate = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <footer style={{
       background: '#070b14',
-      borderTop: '1px solid rgba(0, 242, 254, 0.2)',
-      padding: '3rem 2rem 1.5rem 2rem',
-      color: '#94a3b8',
+      borderTop: '1px solid rgba(0, 242, 254, 0.25)',
+      color: '#e2e8f0',
+      paddingTop: '4.5rem',
       fontSize: '0.9rem'
     }}>
+      {/* Main Footer Grid Content */}
       <div style={{
-        maxWidth: '1200px',
+        maxWidth: '1360px',
         margin: '0 auto',
+        padding: '0 2rem 4rem 2rem',
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-        gap: '2.5rem',
-        marginBottom: '2.5rem'
+        gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+        gap: '3rem'
       }}>
-        {/* Column 1: Company & Contact */}
+        {/* Column 1: Brand & Headquarters */}
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-            <Box size={22} color="#00f2fe" />
-            <span style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff' }}>3D lithoResins</span>
+          <div 
+            onClick={() => navigate('home')} 
+            style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', cursor: 'pointer', marginBottom: '1.2rem' }}
+          >
+            <div style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #00f2fe 0%, #7928ca 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justify: 'center',
+              boxShadow: '0 0 15px rgba(0, 242, 254, 0.5)'
+            }}>
+              <Box size={24} color="#ffffff" />
+            </div>
+            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#ffffff' }}>
+              3D lithoResins
+            </div>
           </div>
-          <p style={{ fontSize: '0.85rem', marginBottom: '1rem', lineHeight: '1.5' }}>
-            Next-generation two-photon photopolymerization photoresins and 3D laser microfabrication solutions.
+
+          <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.7', marginBottom: '1.5rem' }}>
+            Next-generation two-photon photopolymer formulations, galvo laser optical CAD software, and 3D nanolithography solutions.
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.85rem' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
-              <MapPin size={16} color="#00f2fe" style={{ flexShrink: 0, marginTop: '2px' }} />
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.88rem', color: '#cbd5e1' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem' }}>
+              <MapPin size={16} color="#00f2fe" style={{ flexShrink: 0, marginTop: '3px' }} />
               <span>Hermann-von-Helmholtz-Platz 6, 76344 Eggenstein-Leopoldshafen, Germany</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
               <Phone size={16} color="#00f2fe" />
               <span>+49 721 9170 0</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
               <Mail size={16} color="#00f2fe" />
               <span>contact@3dlithoresins.com</span>
             </div>
-            <a
-              href="https://maps.google.com"
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.3rem',
-                color: '#00f2fe',
-                textDecoration: 'none',
-                marginTop: '0.4rem',
-                fontSize: '0.8rem',
-                fontWeight: 600
-              }}>
-              Google Maps Location <ExternalLink size={12} />
-            </a>
           </div>
         </div>
 
-        {/* Column 2: Legal Links */}
+        {/* Column 2: Navigation & Quick Links */}
         <div>
-          <h4 style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: 700, marginBottom: '1rem', letterSpacing: '0.5px' }}>
-            LEGAL & POLICIES
-          </h4>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.85rem' }}>
-            <span onClick={() => setCurrentPage('legal-notice')} style={footerLinkStyle}>LEGAL NOTICE</span>
-            <span onClick={() => setCurrentPage('privacy-statement')} style={footerLinkStyle}>PRIVACY STATEMENT</span>
-            <span onClick={() => setCurrentPage('terms-conditions')} style={footerLinkStyle}>TERMS & CONDITIONS</span>
-            <span onClick={() => setCurrentPage('service-specification')} style={footerLinkStyle}>SERVICE SPECIFICATION</span>
-            <span onClick={() => setCurrentPage('how-to-order')} style={footerLinkStyle}>HOW TO ORDER</span>
-          </div>
-        </div>
-
-        {/* Column 3: Quick Nav */}
-        <div>
-          <h4 style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: 700, marginBottom: '1rem', letterSpacing: '0.5px' }}>
+          <h4 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: 700, marginBottom: '1.2rem', letterSpacing: '0.5px' }}>
             QUICK NAVIGATION
           </h4>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.85rem' }}>
-            <span onClick={() => setCurrentPage('designer')} style={footerLinkStyle}>2PP Physics Simulator</span>
-            <span onClick={() => setCurrentPage('products')} style={footerLinkStyle}>Photoresins Catalog</span>
-            <span onClick={() => setCurrentPage('applications')} style={footerLinkStyle}>Micro-Optics & Biofabrication</span>
-            <span onClick={() => setCurrentPage('shop')} style={footerLinkStyle}>Resin & License Shop</span>
-            <span onClick={() => setCurrentPage('premium-consultation')} style={footerLinkStyle}>Nanofabrication Spec Builder</span>
-          </div>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem' }}>
+            <li onClick={() => navigate('home')} style={footerLinkStyle}>Home & Overview</li>
+            <li onClick={() => navigate('products')} style={footerLinkStyle}>Photoresin Catalog</li>
+            <li onClick={() => navigate('designer')} style={footerLinkStyle}>2PP Physics Engine Studio</li>
+            <li onClick={() => navigate('applications')} style={footerLinkStyle}>Micro-Optics & Biofabrication</li>
+            <li onClick={() => navigate('shop')} style={footerLinkStyle}>Resin & License Shop</li>
+            <li onClick={() => navigate('premium-consultation')} style={footerLinkStyle}>Technical Spec Builder</li>
+          </ul>
         </div>
 
-        {/* Column 4: Media & Certifications */}
+        {/* Column 3: Legal & Policies */}
         <div>
-          <h4 style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: 700, marginBottom: '1rem', letterSpacing: '0.5px' }}>
-            CERTIFICATIONS & MEDIA
+          <h4 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: 700, marginBottom: '1.2rem', letterSpacing: '0.5px' }}>
+            LEGAL & POLICIES
           </h4>
-          <div style={{
-            background: 'rgba(0, 242, 254, 0.05)',
-            border: '1px solid rgba(0, 242, 254, 0.2)',
-            borderRadius: '8px',
-            padding: '0.8rem',
-            marginBottom: '1rem'
-          }}>
-            <div style={{ fontSize: '0.8rem', color: '#00f2fe', fontWeight: 600, marginBottom: '0.3rem' }}>
-              🎥 2PP Nano-Printing Tutorial
-            </div>
-            <p style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-              Watch sub-micron galvo laser voxel scanning in high-speed 3D polymer formulation.
-            </p>
-          </div>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem' }}>
+            <li onClick={() => navigate('legal-notice')} style={footerLinkStyle}>Legal Notice (Impressum)</li>
+            <li onClick={() => navigate('privacy-statement')} style={footerLinkStyle}>Privacy Statement & GDPR</li>
+            <li onClick={() => navigate('terms-conditions')} style={footerLinkStyle}>Terms & Conditions of Sale</li>
+            <li onClick={() => navigate('service-specification')} style={footerLinkStyle}>Service Specification</li>
+            <li onClick={() => navigate('how-to-order')} style={footerLinkStyle}>How to Order & Delivery</li>
+          </ul>
+        </div>
 
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-            <span style={badgeStyle}><Award size={12} color="#00f2fe" /> OpTecBB</span>
-            <span style={badgeStyle}><ShieldCheck size={12} color="#00f2fe" /> EPIC Member</span>
-            <span style={badgeStyle}><Award size={12} color="#00f2fe" /> IVAM Microtechnology</span>
+        {/* Column 4: Newsletter & Social */}
+        <div>
+          <h4 style={{ color: '#ffffff', fontSize: '1rem', fontWeight: 700, marginBottom: '1.2rem', letterSpacing: '0.5px' }}>
+            STAY CONNECTED
+          </h4>
+          <p style={{ color: '#94a3b8', fontSize: '0.88rem', lineHeight: '1.6', marginBottom: '1.2rem' }}>
+            Subscribe to our bimonthly 2PP nanolithography updates & research papers.
+          </p>
+
+          <form onSubmit={(e) => { e.preventDefault(); alert('Subscribed to 3D lithoResins newsletter!'); }} style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', marginBottom: '1.5rem' }}>
+            <input 
+              type="email" 
+              placeholder="Enter your email" 
+              required
+              style={{
+                width: '100%',
+                padding: '0.7rem 1rem',
+                background: 'rgba(5, 8, 17, 0.7)',
+                border: '1px solid rgba(0, 242, 254, 0.3)',
+                borderRadius: '8px',
+                color: '#ffffff',
+                fontSize: '0.88rem',
+                outline: 'none'
+              }}
+            />
+            <button type="submit" className="btn-cyan" style={{ justifyContent: 'center', padding: '0.7rem' }}>
+              Subscribe
+            </button>
+          </form>
+
+          <div style={{ display: 'flex', gap: '0.8rem' }}>
+            <a href="https://linkedin.com" target="_blank" rel="noreferrer" style={socialIconStyle} aria-label="LinkedIn">
+              <Linkedin size={18} />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noreferrer" style={socialIconStyle} aria-label="Twitter">
+              <Twitter size={18} />
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noreferrer" style={socialIconStyle} aria-label="YouTube">
+              <Youtube size={18} />
+            </a>
           </div>
         </div>
       </div>
 
+      {/* Footer Bottom Bar */}
       <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
         borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-        paddingTop: '1.2rem',
-        display: 'flex',
-        alignItems: 'center',
-        justify: 'space-between',
-        flexWrap: 'wrap',
-        gap: '1rem',
-        fontSize: '0.8rem'
+        background: '#050811',
+        padding: '1.5rem 2rem'
       }}>
-        <div>
-          © {new Date().getFullYear()} 3D lithoResins GmbH. All Rights Reserved. Inspired by Nanoscribe Microfabrication.
-        </div>
-        <div style={{ color: '#00f2fe' }}>
-          ISO 9001:2015 Certified Cleanroom Formulation Facilities
+        <div style={{
+          maxWidth: '1360px',
+          margin: '0 auto',
+          display: 'flex',
+          justify: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '1rem',
+          fontSize: '0.85rem',
+          color: '#94a3b8'
+        }}>
+          <div>
+            © {new Date().getFullYear()} 3D lithoResins GmbH. All Rights Reserved. Inspired by Nanoscribe Microfabrication.
+          </div>
+          <div style={{ color: '#00f2fe', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <ShieldCheck size={16} /> ISO 9001:2015 & ISO 14001 Certified Cleanroom Facilities
+          </div>
         </div>
       </div>
     </footer>
   );
-};
+}
 
 const footerLinkStyle = {
+  color: '#94a3b8',
   cursor: 'pointer',
-  transition: 'color 0.2s',
-  textTransform: 'uppercase',
-  fontWeight: 500,
-  letterSpacing: '0.5px'
+  transition: 'color 0.2s ease',
+  display: 'inline-block'
 };
 
-const badgeStyle = {
+const socialIconStyle = {
+  width: '38px',
+  height: '38px',
+  borderRadius: '50%',
   background: 'rgba(255, 255, 255, 0.05)',
   border: '1px solid rgba(255, 255, 255, 0.1)',
-  borderRadius: '4px',
-  padding: '0.2rem 0.5rem',
-  fontSize: '0.72rem',
-  color: '#e2e8f0',
   display: 'flex',
   alignItems: 'center',
-  gap: '0.3rem'
+  justify: 'center',
+  color: '#00f2fe',
+  textDecoration: 'none',
+  transition: 'all 0.3s'
 };
+
+export const Footer = FooterComponent;
+export default FooterComponent;

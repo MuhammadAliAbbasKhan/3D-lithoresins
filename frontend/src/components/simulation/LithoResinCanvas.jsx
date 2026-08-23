@@ -114,7 +114,7 @@ export const LithoResinCanvas = () => {
       ctx.fillStyle = beamGrad;
       ctx.fill();
 
-      // High-Intensity Two-Photon Focal Voxel ($I^2$ absorption spot)
+      // High-Intensity Two-Photon Focal Voxel (I² absorption spot)
       const voxelRadius = (laserPower / 100) * 8 + 4;
       const voxelGrad = ctx.createRadialGradient(objCenterX, voxelZ, 0, objCenterX, voxelZ, voxelRadius);
       voxelGrad.addColorStop(0, '#ffffff');

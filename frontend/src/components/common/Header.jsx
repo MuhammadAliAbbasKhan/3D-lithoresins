@@ -1,341 +1,458 @@
-import React, { useState } from 'react';
-import { Search, Globe, User, LogOut, ChevronDown, Shield, Box, Sparkles } from 'lucide-react';
+// src/components/common/Header.jsx
+import React, { useState, useEffect } from 'react';
+import { Search, Menu, X, ChevronDown, User, LogOut, Box } from 'lucide-react';
 
-export const Header = ({
-  currentPage,
-  setCurrentPage,
-  currentUser,
-  onOpenAuth,
-  onOpenSearch,
-  onLogout
-}) => {
-  const [lang, setLang] = useState('EN');
-  const [activeDropdown, setActiveDropdown] = useState(null);
+export function HeaderComponent({
+  currentPage = 'home',
+  setCurrentPage = () => {},
+  currentUser = null,
+  onOpenAuth = () => {},
+  onOpenSearch = () => {},
+  onLogout = () => {}
+}) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [openSubmenu, setOpenSubmenu] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
 
-  const toggleDropdown = (menu) => {
-    setActiveDropdown(activeDropdown === menu ? null : menu);
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(prev => !prev);
   };
 
-  const navigate = (page) => {
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      if (window.innerWidth >= 1024) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 1024;
+
+  const handleNavClick = (page, e) => {
+    if (e) e.preventDefault();
     setCurrentPage(page);
-    setActiveDropdown(null);
+    setOpenSubmenu(null);
+    setIsMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const navItems = [
+    {
+      id: 'products',
+      label: 'Products',
+      page: 'products',
+      hasSubmenu: true,
+      submenu: {
+        columns: [
+          {
+            headline: 'Printers & Workstations',
+            headlinePage: 'products',
+            sections: [
+              {
+                title: 'Universal 3D Systems',
+                items: [
+                  { title: 'Quantum X shape', description: 'High-resolution 2PP 3D printer', page: 'products' }
+                ]
+              },
+              {
+                title: 'Specialized 2PP Platforms',
+                items: [
+                  { title: 'Quantum X align', description: 'High-precision 3D optics printer', page: 'products' },
+                  { title: 'Quantum X bio', description: 'High-resolution 3D bioprinter', page: 'products' },
+                  { title: 'Quantum X litho', description: 'Grayscale lithography workstation', page: 'products' }
+                ]
+              }
+            ]
+          },
+          {
+            headline: 'Photoresin Formulations',
+            headlinePage: 'products',
+            sections: [
+              {
+                items: [
+                  { title: 'IP-Photoresins', description: 'Sub-micron 3D printing resins', page: 'products' },
+                  { title: 'Bio-Hydrogel Matrices', description: 'Cell scaffolding & life science media', page: 'products' },
+                  { title: 'Micro-Optics Resins', description: 'Highly transparent index-matched resins', page: 'products' }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      id: 'applications',
+      label: 'Applications',
+      page: 'applications',
+      hasSubmenu: true,
+      submenu: {
+        columns: [
+          {
+            headline: 'Micro-Optics & Photonics',
+            sections: [
+              {
+                items: [
+                  { title: 'Freeform Micro-Lenses', page: 'applications' },
+                  { title: 'Fiber Couplers & DOEs', page: 'applications' },
+                  { title: 'Photonic Packaging', page: 'applications' }
+                ]
+              }
+            ]
+          },
+          {
+            headline: 'Life Sciences & MEMS',
+            sections: [
+              {
+                items: [
+                  { title: '3D Bio-Scaffolds', page: 'applications' },
+                  { title: 'Microfluidics & Channels', page: 'applications' },
+                  { title: 'Micromechanics & Metamaterials', page: 'applications' }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      id: 'designer',
+      label: '2PP Simulator',
+      page: 'designer',
+      hasSubmenu: false
+    },
+    {
+      id: 'shop',
+      label: 'Shop & Plans',
+      page: 'shop',
+      hasSubmenu: false
+    },
+    {
+      id: 'support',
+      label: 'Support',
+      page: 'support',
+      hasSubmenu: false
+    },
+    {
+      id: 'about',
+      label: 'Who We Are',
+      page: 'about',
+      hasSubmenu: false
+    }
+  ];
 
   return (
     <header style={{
       position: 'sticky',
       top: 0,
+      left: 0,
+      right: 0,
       zIndex: 1000,
       width: '100%',
-      background: 'rgba(5, 8, 17, 0.95)',
-      backdropFilter: 'blur(16px)',
-      borderBottom: '1px solid rgba(0, 242, 254, 0.2)',
-      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)'
+      maxWidth: '100vw',
+      background: '#ffffff',
+      borderBottom: '1px solid #E5E7EB',
+      boxShadow: isScrolled ? '0 4px 15px rgba(0, 0, 0, 0.08)' : 'none',
+      transition: 'all 0.3s ease',
+      boxSizing: 'border-box'
     }}>
-      {/* Top Utility Control Bar */}
       <div style={{
+        maxWidth: '1440px',
+        width: '100%',
+        margin: '0 auto',
+        padding: windowWidth < 640 ? '0.6rem 0.8rem' : '0.8rem 1.5rem',
         display: 'flex',
         alignItems: 'center',
         justify: 'space-between',
-        padding: '0.4rem 2rem',
-        background: '#090e1a',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-        fontSize: '0.85rem'
+        boxSizing: 'border-box'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <span style={{ color: '#00f2fe', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-            <Sparkles size={14} /> 2PP Nano-Printing Technology Partner
-          </span>
-          <span style={{ color: '#64748b' }}>|</span>
-          <span style={{ color: '#94a3b8' }}>Inspired by Nanoscribe Microfabrication</span>
+        {/* Brand Logo & Heading */}
+        <div 
+          onClick={(e) => handleNavClick('home', e)} 
+          style={{
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.6rem',
+            flexShrink: 0
+          }}
+        >
+          <div style={{
+            width: '38px',
+            height: '38px',
+            borderRadius: '10px',
+            background: 'linear-gradient(135deg, #0066FF 0%, #00afeb 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justify: 'center',
+            boxShadow: '0 4px 12px rgba(0, 102, 255, 0.3)',
+            flexShrink: 0
+          }}>
+            <Box size={22} color="#ffffff" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <div style={{
+              fontSize: windowWidth < 400 ? '1.1rem' : '1.3rem',
+              fontWeight: 800,
+              letterSpacing: '-0.5px',
+              color: '#0B0F33',
+              lineHeight: '1.1',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              whiteSpace: 'nowrap'
+            }}>
+              <span>3D lithoResins</span>
+              <span style={{
+                background: '#e6f0ff',
+                color: '#0066FF',
+                border: '1px solid #0066FF',
+                borderRadius: '4px',
+                padding: '1px 5px',
+                fontSize: '0.68rem',
+                fontWeight: 700
+              }}>2PP</span>
+            </div>
+            {windowWidth >= 480 && (
+              <div style={{ fontSize: '0.68rem', color: '#0066FF', fontWeight: 600, letterSpacing: '0.5px', textTransform: 'lowercase', marginTop: '1px' }}>
+                nanoscale precision in 3D
+              </div>
+            )}
+          </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
-          {/* Quick Search */}
+        {/* Desktop Navigation Links */}
+        {!isMobile && (
+          <nav style={{ flexShrink: 0, boxSizing: 'border-box' }}>
+            <ul style={{ display: 'flex', listStyle: 'none', margin: 0, padding: 0, gap: '1.2rem', alignItems: 'center' }}>
+              {navItems.map((item) => (
+                <li 
+                  key={item.id}
+                  style={{ position: 'relative' }}
+                  onMouseEnter={() => item.hasSubmenu && setOpenSubmenu(item.id)}
+                  onMouseLeave={() => item.hasSubmenu && setOpenSubmenu(null)}
+                >
+                  <button 
+                    onClick={(e) => handleNavClick(item.page, e)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.25rem',
+                      padding: '0.4rem 0.3rem',
+                      color: currentPage === item.page ? '#0066FF' : '#0B0F33',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontSize: '0.92rem',
+                      fontWeight: currentPage === item.page ? '700' : '500',
+                      transition: 'color 0.2s ease',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {item.label}
+                    {item.hasSubmenu && <ChevronDown size={14} color="#0066FF" />}
+                  </button>
+
+                  {/* Submenu Dropdown Panel — Responsive Fit */}
+                  {item.hasSubmenu && openSubmenu === item.id && item.submenu && (
+                    <div style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      background: '#ffffff',
+                      borderRadius: '16px',
+                      border: '1px solid #E5E7EB',
+                      boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
+                      padding: '1.5rem',
+                      width: '580px',
+                      maxWidth: '85vw',
+                      marginTop: '0.5rem',
+                      boxSizing: 'border-box',
+                      zIndex: 1100
+                    }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
+                        {item.submenu.columns.map((column, idx) => (
+                          <div key={idx}>
+                            {column.headline && (
+                              <div 
+                                onClick={(e) => column.headlinePage && handleNavClick(column.headlinePage, e)}
+                                style={{
+                                  fontWeight: '700',
+                                  color: '#0066FF',
+                                  cursor: 'pointer',
+                                  fontSize: '0.92rem',
+                                  marginBottom: '0.6rem',
+                                  borderBottom: '2px solid #0066FF',
+                                  paddingBottom: '0.4rem'
+                                }}
+                              >
+                                {column.headline}
+                              </div>
+                            )}
+                            {column.sections && column.sections.map((section, sIdx) => (
+                              <div key={sIdx} style={{ marginBottom: '0.8rem' }}>
+                                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                                  {section.items.map((subItem, iIdx) => (
+                                    <li key={iIdx} style={{ marginBottom: '0.4rem' }}>
+                                      <div 
+                                        onClick={(e) => handleNavClick(subItem.page || item.page, e)}
+                                        style={{
+                                          color: '#4B5563',
+                                          cursor: 'pointer',
+                                          fontSize: '0.85rem',
+                                          padding: '0.2rem 0'
+                                        }}
+                                      >
+                                        <span style={{ fontWeight: '600', color: '#0B0F33' }}>{subItem.title}</span>
+                                      </div>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
+        {/* Header Right Actions */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexShrink: 0 }}>
+          {/* Quick Search Button */}
           <button
             onClick={onOpenSearch}
             style={{
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              color: '#94a3b8',
-              borderRadius: '6px',
-              padding: '0.3rem 0.8rem',
+              background: '#f3f4f6',
+              border: '1px solid #E5E7EB',
+              color: '#4B5563',
+              borderRadius: '8px',
+              padding: windowWidth < 640 ? '0.45rem 0.6rem' : '0.45rem 0.85rem',
               display: 'flex',
               alignItems: 'center',
-              gap: '0.5rem',
+              gap: '0.4rem',
               cursor: 'pointer',
-              fontSize: '0.8rem'
-            }}>
-            <Search size={14} />
-            <span>Search resins, docs...</span>
+              fontSize: '0.82rem'
+            }}
+          >
+            <Search size={15} />
+            {windowWidth >= 640 && <span>Search resins...</span>}
           </button>
-
-          {/* Language Switcher */}
-          <div style={{
-            display: 'flex',
-            background: 'rgba(255,255,255,0.05)',
-            borderRadius: '6px',
-            padding: '2px',
-            border: '1px solid rgba(255,255,255,0.1)'
-          }}>
-            <button
-              onClick={() => setLang('DE')}
-              style={{
-                background: lang === 'DE' ? '#00f2fe' : 'transparent',
-                color: lang === 'DE' ? '#050811' : '#94a3b8',
-                border: 'none',
-                padding: '2px 8px',
-                borderRadius: '4px',
-                fontSize: '0.75rem',
-                fontWeight: 'bold',
-                cursor: 'pointer'
-              }}>DE</button>
-            <button
-              onClick={() => setLang('EN')}
-              style={{
-                background: lang === 'EN' ? '#00f2fe' : 'transparent',
-                color: lang === 'EN' ? '#050811' : '#94a3b8',
-                border: 'none',
-                padding: '2px 8px',
-                borderRadius: '4px',
-                fontSize: '0.75rem',
-                fontWeight: 'bold',
-                cursor: 'pointer'
-              }}>EN</button>
-          </div>
 
           {/* User Auth Widget */}
           {currentUser ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#e2e8f0' }}>
-                <User size={14} color="#00f2fe" />
-                <span style={{ fontWeight: 600 }}>{currentUser.username}</span>
-                <span style={{
-                  background: 'rgba(0,242,254,0.15)',
-                  color: '#00f2fe',
-                  border: '1px solid #00f2fe',
-                  borderRadius: '4px',
-                  padding: '1px 6px',
-                  fontSize: '0.7rem',
-                  textTransform: 'uppercase'
-                }}>{currentUser.plan_tier}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#0B0F33', fontSize: '0.82rem' }}>
+                <User size={15} color="#0066FF" />
+                {windowWidth >= 480 && <span style={{ fontWeight: 600 }}>{currentUser.username}</span>}
               </div>
               <button
                 onClick={onLogout}
                 style={{
-                  background: 'rgba(239, 68, 68, 0.2)',
+                  background: '#fee2e2',
                   color: '#ef4444',
                   border: '1px solid #ef4444',
                   borderRadius: '6px',
-                  padding: '0.2rem 0.6rem',
-                  fontSize: '0.75rem',
+                  padding: '0.3rem 0.6rem',
+                  fontSize: '0.78rem',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.3rem'
-                }}>
-                <LogOut size={12} /> Log Out
+                  gap: '0.2rem'
+                }}
+              >
+                <LogOut size={13} />
+                {windowWidth >= 480 && <span>Logout</span>}
               </button>
             </div>
           ) : (
             <button
               onClick={onOpenAuth}
-              className="btn-cyan"
-              style={{ padding: '0.3rem 0.9rem', fontSize: '0.8rem' }}>
-              <User size={14} /> Sign In / Register
+              style={{
+                padding: windowWidth < 640 ? '0.45rem 0.9rem' : '0.5rem 1.2rem',
+                background: '#0066FF',
+                color: 'white',
+                borderRadius: '9999px',
+                fontWeight: 700,
+                fontSize: '0.85rem',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.3rem',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              <User size={14} />
+              <span>{windowWidth < 480 ? 'Sign In' : 'Sign In / Register'}</span>
+            </button>
+          )}
+
+          {/* Mobile Hamburger Toggle Button */}
+          {isMobile && (
+            <button
+              onClick={toggleMobileMenu}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                color: '#0B0F33',
+                padding: '0.3rem',
+                display: 'flex',
+                alignItems: 'center',
+                justify: 'center'
+              }}
+              aria-label="Toggle mobile menu"
+            >
+              {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
             </button>
           )}
         </div>
       </div>
 
-      {/* Main Navigation Header Bar */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justify: 'space-between',
-        padding: '0.8rem 2rem'
-      }}>
-        {/* Brand Logo & Tagline */}
-        <div
-          onClick={() => navigate('home')}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', cursor: 'pointer' }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #00f2fe 0%, #7928ca 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 0 15px rgba(0,242,254,0.5)'
-          }}>
-            <Box size={24} color="#ffffff" />
-          </div>
-          <div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.5px' }} className="text-gradient-cyan">
-              3D lithoResins
-            </div>
-            <div style={{ fontSize: '0.72rem', color: '#00f2fe', fontWeight: 500, letterSpacing: '1px', textTransform: 'lowercase' }}>
-              nanoscale precision in 3D
-            </div>
-          </div>
+      {/* Mobile Navigation Dropdown Overlay */}
+      {isMobile && isMobileMenuOpen && (
+        <div style={{
+          background: '#ffffff',
+          borderTop: '1px solid #E5E7EB',
+          padding: '1.2rem 1.5rem 2rem 1.5rem',
+          maxHeight: '75vh',
+          overflowY: 'auto',
+          boxSizing: 'border-box',
+          width: '100%'
+        }}>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+            {navItems.map((item) => (
+              <li key={item.id} style={{ borderBottom: '1px solid #E5E7EB', paddingBottom: '0.7rem' }}>
+                <div 
+                  onClick={(e) => handleNavClick(item.page, e)}
+                  style={{ color: '#0B0F33', fontSize: '1.05rem', fontWeight: 600, cursor: 'pointer' }}
+                >
+                  {item.label}
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
-
-        {/* Navigation Links */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '1.8rem', position: 'relative' }}>
-          <button
-            onClick={() => navigate('home')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: currentPage === 'home' ? '#00f2fe' : '#e2e8f0',
-              fontWeight: currentPage === 'home' ? 700 : 500,
-              cursor: 'pointer',
-              fontSize: '0.95rem'
-            }}>Home</button>
-
-          {/* DESIGNER Dropdown */}
-          <div style={{ position: 'relative' }}>
-            <button
-              onClick={() => toggleDropdown('designer')}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: currentPage === 'designer' ? '#00f2fe' : '#e2e8f0',
-                fontWeight: currentPage === 'designer' ? 700 : 500,
-                cursor: 'pointer',
-                fontSize: '0.95rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.3rem'
-              }}>
-              DESIGNER <ChevronDown size={14} />
-            </button>
-            {activeDropdown === 'designer' && (
-              <div className="glass-panel" style={{
-                position: 'absolute',
-                top: '100%',
-                left: 0,
-                marginTop: '0.5rem',
-                minWidth: '220px',
-                borderRadius: '8px',
-                padding: '0.5rem 0'
-              }}>
-                <div onClick={() => navigate('designer')} style={dropdownItemStyle}>2PP Physics Engine</div>
-                <div onClick={() => navigate('designer')} style={dropdownItemStyle}>Laser Voxel Tuning</div>
-                <div onClick={() => navigate('designer')} style={dropdownItemStyle}>Material Basics</div>
-                <div onClick={() => navigate('designer')} style={dropdownItemStyle}>System Requirements</div>
-                <div onClick={() => navigate('designer')} style={dropdownItemStyle}>Demo Version</div>
-              </div>
-            )}
-          </div>
-
-          {/* Resins & Materials Dropdown */}
-          <div style={{ position: 'relative' }}>
-            <button
-              onClick={() => toggleDropdown('products')}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: currentPage === 'products' ? '#00f2fe' : '#e2e8f0',
-                fontWeight: currentPage === 'products' ? 700 : 500,
-                cursor: 'pointer',
-                fontSize: '0.95rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.3rem'
-              }}>
-              Resins & Materials <ChevronDown size={14} />
-            </button>
-            {activeDropdown === 'products' && (
-              <div className="glass-panel" style={{
-                position: 'absolute',
-                top: '100%',
-                left: 0,
-                marginTop: '0.5rem',
-                minWidth: '220px',
-                borderRadius: '8px',
-                padding: '0.5rem 0'
-              }}>
-                <div onClick={() => navigate('products')} style={dropdownItemStyle}>IP-Photoresins</div>
-                <div onClick={() => navigate('products')} style={dropdownItemStyle}>Bio-Compatible Resins</div>
-                <div onClick={() => navigate('products')} style={dropdownItemStyle}>High-Index Resins</div>
-                <div onClick={() => navigate('products')} style={dropdownItemStyle}>Quantum Resins</div>
-              </div>
-            )}
-          </div>
-
-          <button
-            onClick={() => navigate('applications')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: currentPage === 'applications' ? '#00f2fe' : '#e2e8f0',
-              fontWeight: currentPage === 'applications' ? 700 : 500,
-              cursor: 'pointer',
-              fontSize: '0.95rem'
-            }}>Applications</button>
-
-          <button
-            onClick={() => navigate('shop')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: currentPage === 'shop' ? '#00f2fe' : '#e2e8f0',
-              fontWeight: currentPage === 'shop' ? 700 : 500,
-              cursor: 'pointer',
-              fontSize: '0.95rem'
-            }}>Shop</button>
-
-          <button
-            onClick={() => navigate('support')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: currentPage === 'support' ? '#00f2fe' : '#e2e8f0',
-              fontWeight: currentPage === 'support' ? 700 : 500,
-              cursor: 'pointer',
-              fontSize: '0.95rem'
-            }}>Support</button>
-
-          <button
-            onClick={() => navigate('about')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: currentPage === 'about' ? '#00f2fe' : '#e2e8f0',
-              fontWeight: currentPage === 'about' ? 700 : 500,
-              cursor: 'pointer',
-              fontSize: '0.95rem'
-            }}>Who We Are</button>
-
-          <button
-            onClick={() => navigate('admin')}
-            style={{
-              background: 'rgba(0, 242, 254, 0.1)',
-              border: '1px solid #00f2fe',
-              color: '#00f2fe',
-              fontWeight: 600,
-              padding: '0.4rem 0.8rem',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '0.9rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem'
-            }}>
-            <Shield size={14} /> Admin 🛡️
-          </button>
-        </nav>
-      </div>
+      )}
     </header>
   );
-};
+}
 
-const dropdownItemStyle = {
-  padding: '0.6rem 1.2rem',
-  color: '#e2e8f0',
-  fontSize: '0.88rem',
-  cursor: 'pointer',
-  transition: 'background 0.2s',
-};
+export const Header = HeaderComponent;
+export default HeaderComponent;

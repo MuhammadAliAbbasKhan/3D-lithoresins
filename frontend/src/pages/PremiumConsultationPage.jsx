@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sliders, Send, Lock, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Sparkles, Send, Lock } from 'lucide-react';
 import axios from 'axios';
 import { useToast } from '../context/ToastContext';
 
@@ -48,48 +48,48 @@ const PremiumConsultationPageComponent = ({ currentUser, onOpenAuth }) => {
   };
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '3rem 2rem 5rem 2rem' }}>
-      <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: '#00f2fe', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem' }}>
+    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '5rem 2rem 8rem 2rem', background: '#ffffff', color: '#0B0F33' }}>
+      <div style={{ textAlign: 'center', marginBottom: '4.5rem' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: '#0066FF', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '2px', padding: '0.4rem 1.2rem', borderRadius: '9999px', background: '#e6f0ff', border: '1px solid #0066FF', marginBottom: '1.2rem' }}>
           <Sparkles size={16} /> NANOFABRICATION TECHNICAL SPEC BUILDER
         </div>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#ffffff' }}>
+        <h1 style={{ fontSize: '3rem', fontWeight: 800, color: '#0B0F33', lineHeight: 1.25, marginBottom: '1rem' }}>
           Custom Photoresin & Nanolithography Spec Builder
         </h1>
-        <p style={{ color: '#94a3b8', maxWidth: '700px', margin: '0.6rem auto 0 auto', fontSize: '1rem' }}>
+        <p style={{ color: '#4B5563', maxWidth: '780px', margin: '0.8rem auto 0 auto', fontSize: '1.15rem', lineHeight: 1.8 }}>
           Submit tailored optical parameters for custom chemical synthesis, sub-micron galvo tuning, or microfluidic prototyping.
         </p>
       </div>
 
       {!currentUser ? (
-        <div className="glass-panel" style={{ borderRadius: '16px', padding: '3rem', textAlign: 'center', maxWidth: '550px', margin: '0 auto' }}>
-          <Lock size={36} color="#00f2fe" style={{ marginBottom: '1rem' }} />
-          <h3 style={{ fontSize: '1.4rem', color: '#ffffff', fontWeight: 700, marginBottom: '0.6rem' }}>
+        <div style={{ borderRadius: '24px', padding: '4rem 3rem', textAlign: 'center', maxWidth: '650px', margin: '0 auto', background: '#f8faff', border: '1px solid #E5E7EB', boxShadow: '0 8px 25px rgba(0,0,0,0.05)' }}>
+          <Lock size={42} color="#0066FF" style={{ marginBottom: '1.5rem' }} />
+          <h3 style={{ fontSize: '1.8rem', color: '#0B0F33', fontWeight: 800, marginBottom: '0.8rem' }}>
             🔒 Premium Access Required
           </h3>
-          <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.8rem' }}>
+          <p style={{ color: '#4B5563', fontSize: '1.05rem', marginBottom: '2.5rem', lineHeight: 1.7 }}>
             Please sign in or register an account to access the interactive technical specification builder.
           </p>
-          <button onClick={onOpenAuth} className="btn-cyan" style={{ padding: '0.8rem 1.8rem' }}>
+          <button onClick={onOpenAuth} style={{ padding: '0.9rem 2.2rem', fontSize: '1rem', background: '#0066FF', color: 'white', border: 'none', borderRadius: '9999px', fontWeight: 700, cursor: 'pointer' }}>
             Sign In / Register Account
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="glass-panel" style={{ borderRadius: '16px', padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.2rem' }}>
+        <form onSubmit={handleSubmit} style={{ borderRadius: '24px', padding: '3.5rem 3rem', display: 'flex', flexDirection: 'column', gap: '1.8rem', background: '#f8faff', border: '1px solid #E5E7EB', boxShadow: '0 8px 25px rgba(0,0,0,0.05)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
             <div>
-              <label style={{ fontSize: '0.8rem', color: '#e2e8f0', display: 'block', marginBottom: '0.3rem' }}>Project Title *</label>
+              <label style={{ fontSize: '0.85rem', color: '#0B0F33', display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>Project Title *</label>
               <input type="text" required value={projectTitle} onChange={e => setProjectTitle(e.target.value)} placeholder="e.g. Freeform DOE Array Synthesis" style={inputStyle} />
             </div>
             <div>
-              <label style={{ fontSize: '0.8rem', color: '#e2e8f0', display: 'block', marginBottom: '0.3rem' }}>Company / Institution *</label>
+              <label style={{ fontSize: '0.85rem', color: '#0B0F33', display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>Company / Institution *</label>
               <input type="text" required value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="e.g. Max Planck Institute" style={inputStyle} />
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
             <div>
-              <label style={{ fontSize: '0.8rem', color: '#e2e8f0', display: 'block', marginBottom: '0.3rem' }}>Service Type</label>
+              <label style={{ fontSize: '0.85rem', color: '#0B0F33', display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>Service Type</label>
               <select value={serviceType} onChange={e => setServiceType(e.target.value)} style={inputStyle}>
                 <option value="2PP Custom Synthesis">2PP Custom Synthesis</option>
                 <option value="Cleanroom Micro-Optics">Cleanroom Micro-Optics</option>
@@ -98,7 +98,7 @@ const PremiumConsultationPageComponent = ({ currentUser, onOpenAuth }) => {
             </div>
 
             <div>
-              <label style={{ fontSize: '0.8rem', color: '#e2e8f0', display: 'block', marginBottom: '0.3rem' }}>Industry Domain</label>
+              <label style={{ fontSize: '0.85rem', color: '#0B0F33', display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>Industry Domain</label>
               <select value={industry} onChange={e => setIndustry(e.target.value)} style={inputStyle}>
                 <option value="Micro-Optics">Micro-Optics</option>
                 <option value="Life Sciences">Life Sciences</option>
@@ -108,18 +108,18 @@ const PremiumConsultationPageComponent = ({ currentUser, onOpenAuth }) => {
             </div>
 
             <div>
-              <label style={{ fontSize: '0.8rem', color: '#e2e8f0', display: 'block', marginBottom: '0.3rem' }}>Laser Wavelength</label>
+              <label style={{ fontSize: '0.85rem', color: '#0B0F33', display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>Laser Wavelength</label>
               <input type="text" value={wavelength} onChange={e => setWavelength(e.target.value)} style={inputStyle} />
             </div>
           </div>
 
           <div>
-            <label style={{ fontSize: '0.8rem', color: '#e2e8f0', display: 'block', marginBottom: '0.3rem' }}>System Specifications & Target CAD Parameters</label>
-            <textarea rows={5} required value={systemSpecs} onChange={e => setSystemSpecs(e.target.value)} placeholder="Specify required refractive index, NA of objective lens, laser pulse energy, substrate material (fused silica, silicon)..." style={{ ...inputStyle, resize: 'none' }} />
+            <label style={{ fontSize: '0.85rem', color: '#0B0F33', display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>System Specifications & Target CAD Parameters *</label>
+            <textarea rows={6} required value={systemSpecs} onChange={e => setSystemSpecs(e.target.value)} placeholder="Specify required refractive index, NA of objective lens, laser pulse energy, substrate material (fused silica, silicon)..." style={{ ...inputStyle, resize: 'none' }} />
           </div>
 
-          <button type="submit" disabled={loading} className="btn-cyan" style={{ justifyContent: 'center', padding: '0.85rem' }}>
-            <Send size={16} /> {loading ? 'Submitting Specification...' : 'Submit Technical Specification'}
+          <button type="submit" disabled={loading} style={{ padding: '0.95rem', fontSize: '1rem', background: '#0066FF', color: 'white', border: 'none', borderRadius: '9999px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+            <Send size={18} /> {loading ? 'Submitting Specification...' : 'Submit Technical Specification'}
           </button>
         </form>
       )}
@@ -129,12 +129,12 @@ const PremiumConsultationPageComponent = ({ currentUser, onOpenAuth }) => {
 
 const inputStyle = {
   width: '100%',
-  padding: '0.65rem',
-  background: 'rgba(5, 8, 17, 0.6)',
-  border: '1px solid rgba(255, 255, 255, 0.15)',
-  borderRadius: '8px',
-  color: '#ffffff',
-  fontSize: '0.9rem',
+  padding: '0.8rem 1rem',
+  background: '#ffffff',
+  border: '1px solid #E5E7EB',
+  borderRadius: '10px',
+  color: '#0B0F33',
+  fontSize: '0.95rem',
   outline: 'none'
 };
 

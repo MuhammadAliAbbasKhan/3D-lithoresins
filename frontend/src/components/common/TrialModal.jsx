@@ -43,42 +43,60 @@ export const TrialModal = ({ isOpen, onClose }) => {
       position: 'fixed',
       inset: 0,
       zIndex: 9200,
-      background: 'rgba(5, 8, 17, 0.85)',
-      backdropFilter: 'blur(10px)',
+      background: 'rgba(11, 15, 51, 0.7)',
+      backdropFilter: 'blur(8px)',
       display: 'flex',
       alignItems: 'center',
       justify: 'center',
-      padding: '1rem'
+      padding: '1rem',
+      boxSizing: 'border-box'
     }}>
-      <div className="glass-panel" style={{
+      <div style={{
         width: '100%',
         maxWidth: '500px',
-        borderRadius: '16px',
-        padding: '2rem',
-        position: 'relative'
+        maxHeight: '90vh',
+        overflowY: 'auto',
+        borderRadius: '20px',
+        padding: '2.5rem 2rem',
+        position: 'relative',
+        background: '#ffffff',
+        border: '1px solid #E5E7EB',
+        boxShadow: '0 20px 50px rgba(0,0,0,0.2)',
+        color: '#0B0F33',
+        boxSizing: 'border-box'
       }}>
+        {/* Touch-Friendly Close Button */}
         <button
           onClick={onClose}
+          aria-label="Close Trial Modal"
           style={{
             position: 'absolute',
             top: '1.2rem',
             right: '1.2rem',
-            background: 'none',
+            background: '#f3f4f6',
             border: 'none',
-            color: '#94a3b8',
-            cursor: 'pointer'
+            color: '#4B5563',
+            borderRadius: '50%',
+            width: '36px',
+            height: '36px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justify: 'center',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+            zIndex: 10
           }}>
           <X size={20} />
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-          <Sparkles size={24} color="#00f2fe" />
-          <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#ffffff' }}>Free 14-Day Evaluation License</h3>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.5rem' }}>
+          <Sparkles size={26} color="#0066FF" />
+          <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0B0F33' }}>Free 14-Day Evaluation License</h3>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
           <div>
-            <label style={{ fontSize: '0.8rem', color: '#e2e8f0', display: 'block', marginBottom: '0.3rem' }}>
+            <label style={{ fontSize: '0.85rem', color: '#0B0F33', display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>
               Full Name *
             </label>
             <input
@@ -92,7 +110,7 @@ export const TrialModal = ({ isOpen, onClose }) => {
           </div>
 
           <div>
-            <label style={{ fontSize: '0.8rem', color: '#e2e8f0', display: 'block', marginBottom: '0.3rem' }}>
+            <label style={{ fontSize: '0.85rem', color: '#0B0F33', display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>
               Institutional / Corporate Email *
             </label>
             <input
@@ -100,14 +118,14 @@ export const TrialModal = ({ isOpen, onClose }) => {
               required
               value={email}
               onChange={e => setEmail(e.target.value)}
-              placeholder="alexander@kit.edu"
+              placeholder="a.schmidt@kit.edu"
               style={inputStyle}
             />
           </div>
 
           <div>
-            <label style={{ fontSize: '0.8rem', color: '#e2e8f0', display: 'block', marginBottom: '0.3rem' }}>
-              Institution / Company Name *
+            <label style={{ fontSize: '0.85rem', color: '#0B0F33', display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>
+              Organization / Lab Name *
             </label>
             <input
               type="text"
@@ -120,28 +138,28 @@ export const TrialModal = ({ isOpen, onClose }) => {
           </div>
 
           <div>
-            <label style={{ fontSize: '0.8rem', color: '#e2e8f0', display: 'block', marginBottom: '0.3rem' }}>
-              Software Edition & Resins
+            <label style={{ fontSize: '0.85rem', color: '#0B0F33', display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>
+              Software Suite Package
             </label>
             <select
               value={softwareChoice}
               onChange={e => setSoftwareChoice(e.target.value)}
               style={inputStyle}>
-              <option value="3D lithoResins Studio 2026">3D lithoResins Studio 2026 (Full Suite)</option>
-              <option value="IP-Photoresins Evaluation Kit">IP-Photoresins Evaluation Kit</option>
-              <option value="BioResin 3D Hydrogel SDK">BioResin 3D Hydrogel SDK</option>
+              <option value="3D lithoResins Studio 2026">3D lithoResins Studio 2026</option>
+              <option value="DeScribeX CAD Converter">DeScribeX CAD Converter</option>
+              <option value="GrayScribeX 2.5D Module">GrayScribeX 2.5D Module</option>
             </select>
           </div>
 
           <div>
-            <label style={{ fontSize: '0.8rem', color: '#e2e8f0', display: 'block', marginBottom: '0.3rem' }}>
-              Project Notes & Substrate Requirements
+            <label style={{ fontSize: '0.85rem', color: '#0B0F33', display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>
+              Research Application Notes
             </label>
             <textarea
               rows={3}
               value={comments}
               onChange={e => setComments(e.target.value)}
-              placeholder="Describe your microfabrication application (e.g. microlens arrays, photonic crystals)..."
+              placeholder="Describe target feature size, laser parameters or photoresin requirements..."
               style={{ ...inputStyle, resize: 'none' }}
             />
           </div>
@@ -149,10 +167,24 @@ export const TrialModal = ({ isOpen, onClose }) => {
           <button
             type="submit"
             disabled={loading}
-            className="btn-cyan"
-            style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem', padding: '0.75rem' }}>
-            <Send size={16} />
-            {loading ? 'Submitting Evaluation Request...' : 'Submit Evaluation Request'}
+            style={{
+              width: '100%',
+              padding: '0.9rem',
+              background: '#0066FF',
+              color: 'white',
+              border: 'none',
+              borderRadius: '9999px',
+              fontSize: '1rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              marginTop: '0.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              justify: 'center',
+              gap: '0.5rem',
+              boxShadow: '0 4px 15px rgba(0, 102, 255, 0.3)'
+            }}>
+            <Send size={18} /> {loading ? 'Requesting License...' : 'Submit Evaluation Request'}
           </button>
         </form>
       </div>
@@ -162,11 +194,12 @@ export const TrialModal = ({ isOpen, onClose }) => {
 
 const inputStyle = {
   width: '100%',
-  padding: '0.65rem',
-  background: 'rgba(5, 8, 17, 0.6)',
-  border: '1px solid rgba(255, 255, 255, 0.15)',
-  borderRadius: '8px',
-  color: '#ffffff',
+  padding: '0.75rem 1rem',
+  background: '#ffffff',
+  border: '1px solid #E5E7EB',
+  borderRadius: '10px',
+  color: '#0B0F33',
   fontSize: '0.9rem',
-  outline: 'none'
+  outline: 'none',
+  boxSizing: 'border-box'
 };

@@ -1,124 +1,176 @@
-import React, { useState } from 'react';
-import { Check, ShieldCheck, Zap, Sparkles } from 'lucide-react';
+import React from 'react';
+import { Check, ShieldCheck, Zap, Sparkles, CheckCircle2 } from 'lucide-react';
 
 const ShopPageComponent = ({ onOpenAuth, currentUser, onOpenCheckout }) => {
-  const [billingCycle, setBillingCycle] = useState('monthly');
+
+  const isSubscriptionActive = (tier) => {
+    if (!currentUser || !currentUser.is_paid || !currentUser.subscription_end) return false;
+    const isTierMatch = currentUser.plan_tier?.toLowerCase() === tier.toLowerCase();
+    const isNotExpired = new Date(currentUser.subscription_end) > new Date();
+    return isTierMatch && isNotExpired;
+  };
 
   const handleSelectTier = (tier) => {
     if (!currentUser) {
       onOpenAuth();
     } else {
+      currentUser.plan_tier = tier;
       onOpenCheckout();
     }
   };
 
+  const formatExpiry = (isoString) => {
+    if (!isoString) return '';
+    return new Date(isoString).toLocaleDateString();
+  };
+
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 2rem 5rem 2rem' }}>
-      <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-        <h1 style={{ fontSize: '2.6rem', fontWeight: 800, color: '#ffffff' }}>
+    <div style={{ maxWidth: '1320px', margin: '0 auto', padding: '5rem 2rem 8rem 2rem', background: '#ffffff', color: '#0B0F33', fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ textAlign: 'center', marginBottom: '4.5rem' }}>
+        <div style={{ display: 'inline-block', padding: '0.4rem 1.2rem', borderRadius: '9999px', background: '#e6f0ff', border: '1px solid #0066FF', color: '#0066FF', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '1.2rem' }}>
+          Monthly Subscription Plans
+        </div>
+        <h1 style={{ fontSize: '3rem', fontWeight: 800, color: '#0B0F33', lineHeight: 1.25, marginBottom: '1rem' }}>
           Licensing & Resins Subscription Pricing
         </h1>
-        <p style={{ color: '#94a3b8', maxWidth: '700px', margin: '0.6rem auto 0 auto', fontSize: '1.05rem' }}>
-          Flexible software subscription plans and material bundles for academic labs and industrial cleanrooms.
+        <p style={{ color: '#4B5563', maxWidth: '780px', margin: '0.8rem auto 0 auto', fontSize: '1.15rem', lineHeight: 1.8 }}>
+          Transparent monthly subscription plans for university research labs, optics R&D, and industrial cleanrooms. Pay once per monthly period with no hidden fees.
         </p>
-
-        {/* Monthly / Yearly Toggle */}
-        <div style={{ display: 'inline-flex', background: 'rgba(255,255,255,0.05)', padding: '4px', borderRadius: '10px', border: '1px solid rgba(0, 242, 254, 0.3)', marginTop: '1.8rem' }}>
-          <button
-            onClick={() => setBillingCycle('monthly')}
-            style={{
-              background: billingCycle === 'monthly' ? '#00f2fe' : 'transparent',
-              color: billingCycle === 'monthly' ? '#050811' : '#94a3b8',
-              border: 'none',
-              padding: '0.5rem 1.2rem',
-              borderRadius: '8px',
-              fontWeight: 600,
-              cursor: 'pointer'
-            }}>Monthly Billing</button>
-          <button
-            onClick={() => setBillingCycle('yearly')}
-            style={{
-              background: billingCycle === 'yearly' ? '#00f2fe' : 'transparent',
-              color: billingCycle === 'yearly' ? '#050811' : '#94a3b8',
-              border: 'none',
-              padding: '0.5rem 1.2rem',
-              borderRadius: '8px',
-              fontWeight: 600,
-              cursor: 'pointer'
-            }}>Yearly (Save 20%)</button>
-        </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-        {/* Academic Tier */}
-        <div className="glass-card" style={{ padding: '2.2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem' }}>
+        {/* Academic Tier - $200 / month */}
+        <div style={{ background: '#f8faff', border: '1px solid #E5E7EB', padding: '2.8rem', borderRadius: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 4px 15px rgba(0,0,0,0.04)' }}>
           <div>
-            <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#ffffff', marginBottom: '0.4rem' }}>Academic License</h3>
-            <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '1.5rem' }}>For university research labs & educational cleanrooms</p>
-            <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#00f2fe', marginBottom: '1.5rem' }}>
-              ${billingCycle === 'yearly' ? '119' : '149'} <span style={{ fontSize: '0.9rem', color: '#94a3b8', fontWeight: 400 }}>/ mo</span>
+            <h3 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#0B0F33', marginBottom: '0.5rem' }}>Academic License</h3>
+            <p style={{ fontSize: '0.9rem', color: '#6B7280', marginBottom: '2rem' }}>For university research labs & educational cleanrooms</p>
+            <div style={{ fontSize: '3.2rem', fontWeight: 800, color: '#0066FF', marginBottom: '2rem' }}>
+              $200 <span style={{ fontSize: '1rem', color: '#6B7280', fontWeight: 500 }}>/ month</span>
             </div>
 
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.8rem', fontSize: '0.9rem', color: '#cbd5e1', marginBottom: '2rem' }}>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Check size={16} color="#00f2fe" /> Single User Desktop License</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Check size={16} color="#00f2fe" /> 2PP Physics Engine & Voxel Studio</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Check size={16} color="#00f2fe" /> Standard Photoresin Presets (IP-Dip)</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Check size={16} color="#00f2fe" /> Academic Forum & Email Support</li>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.95rem', color: '#4B5563', marginBottom: '2.5rem' }}>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}><Check size={18} color="#0066FF" /> Single User Desktop License</li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}><Check size={18} color="#0066FF" /> 2PP Physics Engine & Voxel Studio</li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}><Check size={18} color="#0066FF" /> Standard Photoresin Presets (IP-Dip)</li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}><Check size={18} color="#0066FF" /> Academic Forum & Email Support</li>
             </ul>
           </div>
 
-          <button onClick={() => handleSelectTier('academic')} className="btn-cyan" style={{ width: '100%', justifyContent: 'center' }}>
-            Subscribe Academic
-          </button>
+          {isSubscriptionActive('academic') ? (
+            <div style={activeBadgeStyle}>
+              <CheckCircle2 size={18} color="#10B981" /> Active Subscription (Valid until {formatExpiry(currentUser.subscription_end)})
+            </div>
+          ) : (
+            <button onClick={() => handleSelectTier('academic')} style={btnStyle}>
+              Subscribe Academic ($200/mo)
+            </button>
+          )}
         </div>
 
-        {/* Commercial Tier */}
-        <div className="glass-card" style={{ padding: '2.2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '2px solid #00f2fe', boxShadow: '0 0 25px rgba(0,242,254,0.3)' }}>
+        {/* Pro Tier - $300 / month */}
+        <div style={{ background: '#ffffff', border: '2px solid #0066FF', padding: '2.8rem', borderRadius: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 12px 35px rgba(0, 102, 255, 0.15)', position: 'relative' }}>
+          <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', background: '#0066FF', color: '#ffffff', fontWeight: 800, fontSize: '0.78rem', padding: '0.3rem 1rem', borderRadius: '9999px', letterSpacing: '0.5px' }}>
+            MOST POPULAR
+          </div>
           <div>
-            <div style={{ background: '#00f2fe', color: '#050811', fontWeight: 700, fontSize: '0.75rem', padding: '0.2rem 0.6rem', borderRadius: '4px', display: 'inline-block', marginBottom: '0.8rem' }}>MOST POPULAR</div>
-            <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#ffffff', marginBottom: '0.4rem' }}>Commercial R&D</h3>
-            <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '1.5rem' }}>For corporate R&D & optics manufacturing</p>
-            <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#00f2fe', marginBottom: '1.5rem' }}>
-              ${billingCycle === 'yearly' ? '399' : '499'} <span style={{ fontSize: '0.9rem', color: '#94a3b8', fontWeight: 400 }}>/ mo</span>
+            <h3 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#0B0F33', marginBottom: '0.5rem', marginTop: '0.5rem' }}>Pro Litho Suite</h3>
+            <p style={{ fontSize: '0.9rem', color: '#6B7280', marginBottom: '2rem' }}>For corporate R&D & optics manufacturing</p>
+            <div style={{ fontSize: '3.2rem', fontWeight: 800, color: '#0066FF', marginBottom: '2rem' }}>
+              $300 <span style={{ fontSize: '1rem', color: '#6B7280', fontWeight: 500 }}>/ month</span>
             </div>
 
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.8rem', fontSize: '0.9rem', color: '#cbd5e1', marginBottom: '2rem' }}>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Check size={16} color="#00f2fe" /> 5 Multi-Seat Floating Licenses</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Check size={16} color="#00f2fe" /> Full Photoresin Catalog & Custom Formulation</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Check size={16} color="#00f2fe" /> Dual SQLite + MongoDB Cloud Sync</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Check size={16} color="#00f2fe" /> Priority Technical Telemetry Support</li>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.95rem', color: '#4B5563', marginBottom: '2.5rem' }}>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}><Check size={18} color="#0066FF" /> 5 Multi-Seat Floating Licenses</li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}><Check size={18} color="#0066FF" /> Full Photoresin Catalog & Custom Formulation</li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}><Check size={18} color="#0066FF" /> Dual SQLite + MongoDB Cloud Sync</li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}><Check size={18} color="#0066FF" /> Priority Technical Telemetry Support</li>
             </ul>
           </div>
 
-          <button onClick={() => handleSelectTier('commercial')} className="btn-cyan" style={{ width: '100%', justifyContent: 'center' }}>
-            Subscribe Commercial
-          </button>
+          {isSubscriptionActive('pro') ? (
+            <div style={activeBadgeStyle}>
+              <CheckCircle2 size={18} color="#10B981" /> Active Subscription (Valid until {formatExpiry(currentUser.subscription_end)})
+            </div>
+          ) : (
+            <button onClick={() => handleSelectTier('pro')} style={btnStylePrimary}>
+              Subscribe Pro ($300/mo)
+            </button>
+          )}
         </div>
 
-        {/* Enterprise Tier */}
-        <div className="glass-card" style={{ padding: '2.2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        {/* Enterprise Tier - $500 / month */}
+        <div style={{ background: '#f8faff', border: '1px solid #E5E7EB', padding: '2.8rem', borderRadius: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 4px 15px rgba(0,0,0,0.04)' }}>
           <div>
-            <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#ffffff', marginBottom: '0.4rem' }}>Enterprise Industrial</h3>
-            <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '1.5rem' }}>For high-volume cleanrooms & semiconductor fabs</p>
-            <div style={{ fontSize: '2.4rem', fontWeight: 800, color: '#00f2fe', marginBottom: '1.5rem' }}>
-              ${billingCycle === 'yearly' ? '799' : '999'} <span style={{ fontSize: '0.9rem', color: '#94a3b8', fontWeight: 400 }}>/ mo</span>
+            <h3 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#0B0F33', marginBottom: '0.5rem' }}>Enterprise Cleanroom</h3>
+            <p style={{ fontSize: '0.9rem', color: '#6B7280', marginBottom: '2rem' }}>For high-volume cleanrooms & semiconductor fabs</p>
+            <div style={{ fontSize: '3.2rem', fontWeight: 800, color: '#0066FF', marginBottom: '2rem' }}>
+              $500 <span style={{ fontSize: '1rem', color: '#6B7280', fontWeight: 500 }}>/ month</span>
             </div>
 
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.8rem', fontSize: '0.9rem', color: '#cbd5e1', marginBottom: '2rem' }}>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Check size={16} color="#00f2fe" /> Unlimited Organization Licenses</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Check size={16} color="#00f2fe" /> On-Premise API & Custom Physics Engine</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Check size={16} color="#00f2fe" /> Dedicated Chemical Synthesis Specialist</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Check size={16} color="#00f2fe" /> 24/7 SLA Guarantee & Cleanroom Audit</li>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.95rem', color: '#4B5563', marginBottom: '2.5rem' }}>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}><Check size={18} color="#0066FF" /> Unlimited Organization Licenses</li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}><Check size={18} color="#0066FF" /> On-Premise API & Custom Physics Engine</li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}><Check size={18} color="#0066FF" /> Dedicated Chemical Synthesis Specialist</li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}><Check size={18} color="#0066FF" /> 24/7 SLA Guarantee & Cleanroom Audit</li>
             </ul>
           </div>
 
-          <button onClick={() => handleSelectTier('enterprise')} className="btn-cyan" style={{ width: '100%', justifyContent: 'center' }}>
-            Subscribe Enterprise
-          </button>
+          {isSubscriptionActive('enterprise') ? (
+            <div style={activeBadgeStyle}>
+              <CheckCircle2 size={18} color="#10B981" /> Active Subscription (Valid until {formatExpiry(currentUser.subscription_end)})
+            </div>
+          ) : (
+            <button onClick={() => handleSelectTier('enterprise')} style={btnStyle}>
+              Subscribe Enterprise ($500/mo)
+            </button>
+          )}
         </div>
       </div>
     </div>
   );
+};
+
+const activeBadgeStyle = {
+  width: '100%',
+  padding: '0.85rem',
+  background: '#e6f4ea',
+  border: '1px solid #10B981',
+  color: '#065f46',
+  borderRadius: '9999px',
+  fontWeight: 700,
+  fontSize: '0.85rem',
+  display: 'flex',
+  alignItems: 'center',
+  justify: 'center',
+  gap: '0.4rem',
+  boxSizing: 'border-box'
+};
+
+const btnStyle = {
+  width: '100%',
+  padding: '0.85rem',
+  background: 'transparent',
+  border: '2px solid #0066FF',
+  color: '#0066FF',
+  borderRadius: '9999px',
+  fontWeight: 700,
+  fontSize: '0.95rem',
+  cursor: 'pointer',
+  transition: 'all 0.3s'
+};
+
+const btnStylePrimary = {
+  width: '100%',
+  padding: '0.85rem',
+  background: '#0066FF',
+  border: 'none',
+  color: '#ffffff',
+  borderRadius: '9999px',
+  fontWeight: 700,
+  fontSize: '0.95rem',
+  cursor: 'pointer',
+  boxShadow: '0 4px 15px rgba(0, 102, 255, 0.3)',
+  transition: 'all 0.3s'
 };
 
 export const ShopPage = ShopPageComponent;

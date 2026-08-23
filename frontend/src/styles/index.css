@@ -1,35 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
 
 :root {
-  --bg-primary: #050811;
-  --bg-secondary: #0b1326;
-  --bg-card: #101c36;
-  --bg-card-hover: #162445;
-  --cyan-primary: #00f2fe;
-  --cyan-glow: rgba(0, 242, 254, 0.4);
-  --violet-accent: #7928ca;
-  --violet-glow: rgba(121, 40, 202, 0.4);
-  --blue-bright: #4facfe;
-  --text-main: #e2e8f0;
-  --text-muted: #94a3b8;
-  --border-light: rgba(255, 255, 255, 0.1);
-  --border-cyan: rgba(0, 242, 254, 0.3);
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8faff;
+  --bg-card: #ffffff;
+  --blue-primary: #0066FF;
+  --blue-hover: #0052cc;
+  --text-main: #0B0F33;
+  --text-muted: #4B5563;
+  --border-light: #E5E7EB;
+  --border-blue: rgba(0, 102, 255, 0.3);
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-body {
+html, body {
   background-color: var(--bg-primary);
   color: var(--text-main);
   font-family: var(--font-sans);
   overflow-x: hidden;
   line-height: 1.6;
+  width: 100%;
 }
 
 /* Scrollbar */
@@ -37,99 +35,51 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: var(--bg-secondary);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #cbd5e1;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--cyan-primary);
+  background: var(--blue-primary);
 }
 
-/* Glassmorphism Classes */
-.glass-panel {
-  background: rgba(11, 19, 38, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-cyan);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+/* Global Mobile Form Responsiveness */
+input, select, textarea, button {
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-.glass-card {
-  background: rgba(16, 28, 54, 0.6);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem !important;
+  }
+  h2 {
+    font-size: 1.6rem !important;
+  }
+  h3 {
+    font-size: 1.3rem !important;
+  }
+  
+  /* Ensure forms fit inside mobile viewports with close crosses visible */
+  .modal-container, div[style*="position: fixed"] > div {
+    max-width: 95vw !important;
+    max-height: 90vh !important;
+    padding: 1.5rem 1.2rem !important;
+    border-radius: 16px !important;
+  }
 
-.glass-card:hover {
-  background: rgba(22, 36, 69, 0.8);
-  border-color: var(--cyan-primary);
-  box-shadow: 0 0 20px var(--cyan-glow);
-  transform: translateY(-2px);
-}
+  /* Responsive grids fallback to single column */
+  div[style*="display: grid"] {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
 
-/* Buttons */
-.btn-cyan {
-  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-  color: #050811;
-  font-weight: 600;
-  padding: 0.6rem 1.4rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
-}
-
-.btn-cyan:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
-}
-
-.btn-outline {
-  background: transparent;
-  color: var(--cyan-primary);
-  border: 1px solid var(--cyan-primary);
-  font-weight: 500;
-  padding: 0.6rem 1.4rem;
-  border-radius: 8px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
-}
-
-.btn-outline:hover {
-  background: rgba(0, 242, 254, 0.1);
-  box-shadow: 0 0 15px var(--cyan-glow);
-}
-
-/* Typography Gradient */
-.text-gradient {
-  background: linear-gradient(135deg, #00f2fe 0%, #7928ca 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-gradient-cyan {
-  background: linear-gradient(135deg, #ffffff 0%, #00f2fe 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Animations */
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
-}
-
-.pulse-glow {
-  animation: pulseGlow 3s infinite ease-in-out;
+  /* Tables overflow scroll on touch */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 }

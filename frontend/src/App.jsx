@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastProvider } from './context/ToastContext';
 import { ToastNotification } from './components/common/ToastNotification';
 import { Header } from './components/common/Header';
 import { Footer } from './components/common/Footer';
-import { AuthModal } from './components/common/AuthModal';
 import { CheckoutModal } from './components/common/CheckoutModal';
 import { TrialModal } from './components/common/TrialModal';
 import { SearchModal } from './components/common/SearchModal';
@@ -18,19 +17,31 @@ import { AboutPage } from './pages/AboutPage';
 import { AdminPage } from './pages/AdminPage';
 import { PremiumConsultationPage } from './pages/PremiumConsultationPage';
 import { LegalPage } from './pages/LegalPage';
+import { AuthPage } from './pages/AuthPage';
 
 function MainApp() {
   const [currentPage, setCurrentPage] = useState('home');
   const [currentUser, setCurrentUser] = useState(null);
 
   // Modals state
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isTrialOpen, setIsTrialOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('litho_user');
+      if (stored) {
+        setCurrentUser(JSON.parse(stored));
+      }
+    } catch (e) {
+      // Ignore parsing errors
+    }
+  }, []);
+
   const handleLoginSuccess = (user, triggerCheckout = false) => {
     setCurrentUser(user);
+    localStorage.setItem('litho_user', JSON.stringify(user));
     if (triggerCheckout) {
       setIsCheckoutOpen(true);
     }
@@ -38,12 +49,13 @@ function MainApp() {
 
   const handleLogout = () => {
     setCurrentUser(null);
+    localStorage.removeItem('litho_user');
   };
 
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <HomePage setCurrentPage={setCurrentPage} onOpenTrial={() => setIsTrialOpen(true)} onOpenAuth={() => setIsAuthOpen(true)} />;
+        return <HomePage setCurrentPage={setCurrentPage} onOpenTrial={() => setIsTrialOpen(true)} onOpenAuth={() => setCurrentPage('login')} />;
       case 'designer':
         return <DesignerPage />;
       case 'products':
@@ -51,7 +63,7 @@ function MainApp() {
       case 'applications':
         return <ApplicationsPage setCurrentPage={setCurrentPage} />;
       case 'shop':
-        return <ShopPage onOpenAuth={() => setIsAuthOpen(true)} currentUser={currentUser} onOpenCheckout={() => setIsCheckoutOpen(true)} />;
+        return <ShopPage onOpenAuth={() => setCurrentPage('login')} currentUser={currentUser} onOpenCheckout={() => setIsCheckoutOpen(true)} />;
       case 'support':
         return <SupportPage />;
       case 'about':
@@ -59,7 +71,11 @@ function MainApp() {
       case 'admin':
         return <AdminPage />;
       case 'premium-consultation':
-        return <PremiumConsultationPage currentUser={currentUser} onOpenAuth={() => setIsAuthOpen(true)} />;
+        return <PremiumConsultationPage currentUser={currentUser} onOpenAuth={() => setCurrentPage('login')} />;
+      case 'login':
+        return <AuthPage initialMode="login" onLoginSuccess={handleLoginSuccess} setCurrentPage={setCurrentPage} />;
+      case 'signup':
+        return <AuthPage initialMode="signup" onLoginSuccess={handleLoginSuccess} setCurrentPage={setCurrentPage} />;
       case 'legal-notice':
       case 'privacy-statement':
       case 'terms-conditions':
@@ -67,39 +83,36 @@ function MainApp() {
       case 'how-to-order':
         return <LegalPage type={currentPage} setCurrentPage={setCurrentPage} />;
       default:
-        return <HomePage setCurrentPage={setCurrentPage} onOpenTrial={() => setIsTrialOpen(true)} onOpenAuth={() => setIsAuthOpen(true)} />;
+        return <HomePage setCurrentPage={setCurrentPage} onOpenTrial={() => setIsTrialOpen(true)} onOpenAuth={() => setCurrentPage('login')} />;
     }
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#050811' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#ffffff', color: '#0B0F33' }}>
       <Header
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         currentUser={currentUser}
-        onOpenAuth={() => setIsAuthOpen(true)}
+        onOpenAuth={() => setCurrentPage('login')}
         onOpenSearch={() => setIsSearchOpen(true)}
         onLogout={handleLogout}
       />
 
-      <main style={{ flex: 1 }}>
+      <main style={{ flex: 1, background: '#ffffff' }}>
         {renderPage()}
       </main>
 
       <Footer setCurrentPage={setCurrentPage} />
 
       {/* Global Modals */}
-      <AuthModal
-        isOpen={isAuthOpen}
-        onClose={() => setIsAuthOpen(false)}
-        onLoginSuccess={handleLoginSuccess}
-      />
-
       <CheckoutModal
         isOpen={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
         currentUser={currentUser}
-        onPaymentSuccess={(updatedUser) => setCurrentUser(updatedUser)}
+        onPaymentSuccess={(updatedUser) => {
+          setCurrentUser(updatedUser);
+          localStorage.setItem('litho_user', JSON.stringify(updatedUser));
+        }}
       />
 
       <TrialModal
