@@ -1,6 +1,6 @@
 // src/components/common/Footer.jsx
 import React from 'react';
-import { Linkedin, Twitter, Youtube, Mail, MapPin, Phone, ExternalLink, ShieldCheck, Award, Box } from 'lucide-react';
+import { Mail, MapPin, Phone, ExternalLink, ShieldCheck, Award, Box } from 'lucide-react';
 
 export function FooterComponent({ setCurrentPage = () => {} }) {
   const navigate = (page) => {
@@ -55,15 +55,15 @@ export function FooterComponent({ setCurrentPage = () => {} }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.88rem', color: '#cbd5e1' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem' }}>
               <MapPin size={16} color="#00f2fe" style={{ flexShrink: 0, marginTop: '3px' }} />
-              <span>Hermann-von-Helmholtz-Platz 6, 76344 Eggenstein-Leopoldshafen, Germany</span>
+              <span>Address coming soon</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
               <Phone size={16} color="#00f2fe" />
-              <span>+49 721 9170 0</span>
+              <span>Phone coming soon</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
               <Mail size={16} color="#00f2fe" />
-              <span>contact@3dlithoresins.com</span>
+              <span>Email coming soon</span>
             </div>
           </div>
         </div>
@@ -127,17 +127,7 @@ export function FooterComponent({ setCurrentPage = () => {} }) {
             </button>
           </form>
 
-          <div style={{ display: 'flex', gap: '0.8rem' }}>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" style={socialIconStyle} aria-label="LinkedIn">
-              <Linkedin size={18} />
-            </a>
-            <a href="https://twitter.com" target="_blank" rel="noreferrer" style={socialIconStyle} aria-label="Twitter">
-              <Twitter size={18} />
-            </a>
-            <a href="https://youtube.com" target="_blank" rel="noreferrer" style={socialIconStyle} aria-label="YouTube">
-              <Youtube size={18} />
-            </a>
-          </div>
+          {/* TODO: add verified social links */}
         </div>
       </div>
 
@@ -159,7 +149,7 @@ export function FooterComponent({ setCurrentPage = () => {} }) {
           color: '#94a3b8'
         }}>
           <div>
-            © {new Date().getFullYear()} 3D lithoResins GmbH. All Rights Reserved. Inspired by Nanoscribe Microfabrication.
+            © {new Date().getFullYear()} 3D lithoResins. All Rights Reserved.
           </div>
           <div style={{ color: '#00f2fe', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <ShieldCheck size={16} /> ISO 9001:2015 & ISO 14001 Certified Cleanroom Facilities
